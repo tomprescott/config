@@ -149,6 +149,7 @@ return require('packer').startup(function()
   -- Colorschemes --
   --use 'RRethy/nvim-base16'
   --use 'kyazdani42/nvim-palenight.lua'
+  use 'thedenisnikulin/vim-cyberpunk' 
 
   use {
     'embark-theme/vim',
@@ -160,5 +161,33 @@ return require('packer').startup(function()
 
   -- Other stuff --
   use 'frazrepo/vim-rainbow'
+
+  use {'nvim-treesitter/nvim-treesitter'}
+  use {'nvim-orgmode/orgmode', config = function()
+    require('orgmode').setup{}
+  end
+  }
+
+  -- Load custom treesitter grammar for org filetype
+  require('orgmode').setup_ts_grammar()
+  
+  -- Treesitter configuration
+  require('nvim-treesitter.configs').setup {
+    -- If TS highlights are not enabled at all, or disabled via `disable` prop,
+    -- highlighting will fallback to default Vim syntax highlighting
+    highlight = {
+      enable = true,
+      -- Required for spellcheck, some LaTex highlights and
+      -- code block highlights that do not have ts grammar
+      additional_vim_regex_highlighting = {'org'},
+    },
+    ensure_installed = {'org'}, -- Or run :TSUpdate org
+  }
+  
+  require('orgmode').setup({
+    org_agenda_files = {'~/Dropbox/org/*', '~/my-orgs/**/*'},
+    org_default_notes_file = '~/Dropbox/org/refile.org',
+  })
+  
 end)
 
